@@ -1,0 +1,9 @@
+ru/aston/attractionapp/controller/AttractionsController.class
+ru/aston/attractionapp/entity/Attraction.class
+ru/aston/attractionapp/AttractionsApplication.class
+ru/aston/attractionapp/entity/City.class
+ru/aston/attractionapp/entity/Activity.class
+ru/aston/attractionapp/service/AttractionService.class
+ru/aston/attractionapp/entity/AttractionType.class
+ru/aston/attractionapp/repository/AttractionRepository.class
+ru/aston/attractionapp/service/AttractionServiceImpl.class

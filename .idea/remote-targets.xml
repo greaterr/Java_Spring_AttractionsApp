@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="RemoteTargetsManager">
+    <option name="projectDefaultTargetUuid" value="930068c4-dd56-4349-a8e2-b91e9f396dc8" />
+    <targets>
+      <target name="WSL - Ubuntu" type="wsl" uuid="930068c4-dd56-4349-a8e2-b91e9f396dc8">
+        <config>
+          <option name="distributionMsId" value="Ubuntu" />
+          <option name="projectRootOnTarget" value="{exitCode=0, timeout=false, cancelled=false, stdout=/mnt/d/IntelliJ IDEA 2023.2.5/jbr/bin&#10;, stderr=}/attraction-parent" />
+        </config>
+        <ContributedStateBase type="JavaLanguageRuntime">
+          <config>
+            <option name="homePath" value="/usr/lib/jvm/java-21-openjdk-amd64" />
+            <option name="javaVersionString" value="21.0.4" />
+          </config>
+        </ContributedStateBase>
+      </target>
+      <target name="attractions_db" type="docker-compose" uuid="af47c0f5-84b2-42df-b23d-43c8b1115f9e">
+        <config>
+          <option name="targetPlatform">
+            <TargetPlatform />
+          </option>
+          <option name="configurationFiles">
+            <list>
+              <option value="C:\Users\timaz\Documents\ForAston\ex02_maven\attraction-parent\attractions-app\docker-compose.yaml" />
+            </list>
+          </option>
+          <option name="projectName" value="attractions-app" />
+          <option name="serviceName" value="db" />
+        </config>
+        <ContributedStateBase type="JavaLanguageRuntime">
+          <config />
+        </ContributedStateBase>
+      </target>
+    </targets>
+  </component>
+</project>
