@@ -29,7 +29,7 @@ public class AttractionServiceImpl implements AttractionService {
 
     @Override
     public List<Attraction> findAllByCityId(Long cityId) {
-        return this.attractionRepository.findAllByCityId(cityId);
+        return this.attractionRepository.findAllByCityCityId(cityId);
     }
 
     @Override

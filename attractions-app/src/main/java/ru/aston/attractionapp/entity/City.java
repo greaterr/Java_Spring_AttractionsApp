@@ -1,9 +1,7 @@
 package ru.aston.attractionapp.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -16,6 +14,8 @@ public class City {
 
     @Id
     @GeneratedValue
+    @Getter
+    @Setter
     private Long cityId;
 
     private String name;
@@ -24,13 +24,8 @@ public class City {
     private boolean hasMetro;
 
     @OneToMany
+    @JoinColumn(name="city_id")
     private List<Attraction> attractions;
 
-    public void setId(Long id) {
-        this.cityId = id;
-    }
 
-    public Long getId() {
-        return cityId;
-    }
 }

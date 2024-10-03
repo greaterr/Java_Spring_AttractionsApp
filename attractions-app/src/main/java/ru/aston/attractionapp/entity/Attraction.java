@@ -17,6 +17,7 @@ public class Attraction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long attractionId;
+
     private String name;
     private LocalDate creationDate;
     private String description;
