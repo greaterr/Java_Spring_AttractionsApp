@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import ru.aston.attractionapp.dto.AttractionDto;
 import ru.aston.attractionapp.entity.Attraction;
 import ru.aston.attractionapp.entity.AttractionType;
 import ru.aston.attractionapp.service.AttractionService;
@@ -21,7 +22,7 @@ public class AttractionsController {
     private final AttractionService attractionService;
 
     @GetMapping("/attractions")
-    public List<Attraction> findAllAttractions() {
+    public List<AttractionDto> findAllAttractions() {
         return this.attractionService.findAllAttractions();
     }
 

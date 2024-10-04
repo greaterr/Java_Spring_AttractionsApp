@@ -10,15 +10,16 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ActivityDto {
+public class CityDto {
     private Long id;
     private String name;
-    private String description;
+    private int population;
+    private boolean hasMetro;
     private List<Long> attractionsIds;
 
     public void setAttractionsIds(List<Attraction> attractions) {
         this.attractionsIds = new ArrayList<>();
-        for (Attraction attraction : attractions) {
+        for (Attraction  attraction  : attractions) {
             this.attractionsIds.add(attraction.getAttractionId());
         }
     }
