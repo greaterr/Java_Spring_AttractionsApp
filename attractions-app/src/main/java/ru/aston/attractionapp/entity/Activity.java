@@ -22,6 +22,5 @@ public class Activity {
     private String description;
 
     @ManyToMany(mappedBy = "activities")
-    private List<Attraction> attractionList;
-
+    private List<Attraction> attractions;
 }

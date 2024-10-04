@@ -1,4 +1,4 @@
-package ru.aston.attractionapp.utils;
+/*package ru.aston.attractionapp.utils;
 
 import ru.aston.attractionapp.dto.ActivityDto;
 import ru.aston.attractionapp.dto.AttractionDto;
@@ -19,6 +19,16 @@ public class MappingUtils {
     return attractionDto;
     }
 
+//    public static Attraction mapToAttractionEntity(AttractionDto attractionDto) {
+//        Attraction attractionEntity = new Attraction();
+//        attractionEntity.setAttractionId(attractionDto.getId());
+//        attractionEntity.setName(attractionDto.getName()););
+//        attractionEntity.setType(attractionDto.getType());
+//        attractionEntity.setDescription(attractionDto.getDescripton());
+//        attractionEntity.setCity(attractionDto.getCityId());
+//        return attractionEntity;
+//    }
+
     public static CityDto mapToCityDto(City city) {
         CityDto cityDto = new CityDto();
         cityDto.setId(city.getCityId());
@@ -38,3 +48,5 @@ public class MappingUtils {
         return activityDto;
     }
 }
+
+ */

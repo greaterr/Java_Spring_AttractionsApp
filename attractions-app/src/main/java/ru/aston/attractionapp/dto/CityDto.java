@@ -11,16 +11,18 @@ import java.util.List;
 @Getter
 @Setter
 public class CityDto {
-    private Long id;
+    private Long CityId;
     private String name;
     private int population;
     private boolean hasMetro;
-    private List<Long> attractionsIds;
+    private List<AttractionDto> attractions;
 
-    public void setAttractionsIds(List<Attraction> attractions) {
+ /*   public void setAttractionsIds(List<Attraction> attractions) {
         this.attractionsIds = new ArrayList<>();
         for (Attraction  attraction  : attractions) {
             this.attractionsIds.add(attraction.getAttractionId());
         }
     }
+
+  */
 }

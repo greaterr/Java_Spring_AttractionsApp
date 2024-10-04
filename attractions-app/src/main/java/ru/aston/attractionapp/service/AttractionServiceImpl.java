@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 import ru.aston.attractionapp.dto.AttractionDto;
 import ru.aston.attractionapp.entity.Attraction;
 import ru.aston.attractionapp.entity.AttractionType;
+import ru.aston.attractionapp.mapper.AttractionMapper;
 import ru.aston.attractionapp.repository.AttractionRepository;
-import ru.aston.attractionapp.utils.MappingUtils;
+//import ru.aston.attractionapp.utils.MappingUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,9 +24,12 @@ public class AttractionServiceImpl implements AttractionService {
 
     @Override
     public List<AttractionDto> findAllAttractions() {
-        return this.attractionRepository.findAllByOrderByNameAsc().stream()
-                .map(MappingUtils::mapToAttractionDto)
-                .collect(Collectors.toList());
+        List<AttractionDto> collect = new ArrayList<>();
+        for (Attraction attraction : this.attractionRepository.findAllByOrderByNameAsc()) {
+            AttractionDto attractionDto = AttractionMapper.INSTANCE.toAttractionDto(attraction);
+            collect.add(attractionDto);
+        }
+        return collect;
     }
 
     @Override

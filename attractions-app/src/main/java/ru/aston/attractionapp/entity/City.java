@@ -23,8 +23,7 @@ public class City {
     @Column(name="has_metro")
     private boolean hasMetro;
 
-    @OneToMany
-    @JoinColumn(name="city_id")
+    @OneToMany (mappedBy = "city", cascade = CascadeType.ALL)
     private List<Attraction> attractions;
 
 
