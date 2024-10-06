@@ -1,4 +1,4 @@
-package ru.aston.arrtactionapp.repository;
+package ru.aston.attractionapp.repository;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

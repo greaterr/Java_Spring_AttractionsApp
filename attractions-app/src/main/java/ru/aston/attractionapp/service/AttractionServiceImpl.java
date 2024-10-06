@@ -13,7 +13,6 @@ import ru.aston.attractionapp.repository.AttractionRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,17 +32,28 @@ public class AttractionServiceImpl implements AttractionService {
     }
 
     @Override
-    public List<Attraction> findAttractionsByType(AttractionType type) {
-        return this.attractionRepository.findAllByType(type);
+    public List<AttractionDto> findAttractionsByType(AttractionType type) {
+        List<AttractionDto> collect = new ArrayList<>();
+        for (Attraction attraction : this.attractionRepository.findAllByType(type)) {
+            AttractionDto attractionDto = AttractionMapper.INSTANCE.toAttractionDto(attraction);
+            collect.add(attractionDto);
+        }
+        return collect;
     }
 
     @Override
-    public List<Attraction> findAllByCityId(Long cityId) {
-        return this.attractionRepository.findAllByCityCityId(cityId);
+    public List<AttractionDto> findAllByCityId(Long cityId) {
+        List<AttractionDto> collect = new ArrayList<>();
+        for (Attraction attraction : this.attractionRepository.findAllByCityCityId(cityId)) {
+            AttractionDto attractionDto = AttractionMapper.INSTANCE.toAttractionDto(attraction);
+            collect.add(attractionDto);
+        }
+        return collect;
     }
 
     @Override
-    public Attraction findAttractinById(Long attractionId) {
-        return this.attractionRepository.findById(attractionId).orElse(null);
+    public AttractionDto findAttractinById(Long attractionId) {
+        Attraction attraction = this.attractionRepository.findById(attractionId).orElse(null);
+        return AttractionMapper.INSTANCE.toAttractionDto(attraction);
     }
 }

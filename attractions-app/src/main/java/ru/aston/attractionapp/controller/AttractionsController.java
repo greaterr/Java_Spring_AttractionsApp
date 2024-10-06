@@ -26,18 +26,18 @@ public class AttractionsController {
         return this.attractionService.findAllAttractions();
     }
 
-    @GetMapping("/attractions/{type}")
-    public List<Attraction> findAttractionsByType(@PathVariable AttractionType type) {
+    @GetMapping("/attractions/type/{type}")
+    public List<AttractionDto> findAttractionsByType(@PathVariable AttractionType type) {
         return  this.attractionService.findAttractionsByType(type);
     }
 
-    @GetMapping("/attractions/{cityId}")
-    public List<Attraction> findAttractionsByCityId(@PathVariable Long cityId) {
+    @GetMapping("/attractions/city/{cityId}")
+    public List<AttractionDto> findAttractionsByCityId(@PathVariable Long cityId) {
         return  this.attractionService.findAllByCityId(cityId);
     }
 
     @GetMapping("/attractions/{attractionId}")
-        public Attraction findAttractionById(@PathVariable Long attractionId) {
+        public AttractionDto findAttractionById(@PathVariable Long attractionId) {
             return this.attractionService.findAttractinById(attractionId);
         }
 }
