@@ -1,30 +1,31 @@
 package ru.aston.attractionapp.controller;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.aston.attractionapp.dto.AttractionDto;
-
 import ru.aston.attractionapp.entity.AttractionType;
 import ru.aston.attractionapp.service.AttractionService;
 
 import java.util.List;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AttractionsController {
 
     @Autowired
     private final AttractionService attractionService;
 
     @PostMapping("/attractions")
-    public ResponseEntity<AttractionDto> addAttraction(@RequestBody AttractionDto attractionDto) {
-        AttractionDto savedAttraction = attractionService.addAttraction(attractionDto);
-        return new ResponseEntity<>(savedAttraction, HttpStatus.CREATED);
+    public ResponseEntity<Object> addAttraction(@RequestBody AttractionDto attractionDto) {
+        try {
+            AttractionDto savedAttraction = attractionService.addAttraction(attractionDto);
+            return new ResponseEntity<>(savedAttraction, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        }
     }
 
     @GetMapping("/attractions")

@@ -26,6 +26,4 @@ public class CityController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
     }
-
-
 }

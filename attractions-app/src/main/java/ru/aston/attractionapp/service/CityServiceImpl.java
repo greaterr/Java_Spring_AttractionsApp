@@ -24,7 +24,8 @@ public class CityServiceImpl implements CityService {
     public CityDto addCity(CityDto cityDto) throws IllegalArgumentException {
         Optional<City> existingCityByName = cityRepository.findByName(cityDto.getName());
         if (existingCityByName.isPresent()) {
-            throw new IllegalArgumentException("City with name '" + cityDto.getName() + "' already exists");
+            throw new IllegalArgumentException("City with name '" + cityDto.getName() + "' already exists"
+                    + " and has an id: '" + existingCityByName.get().getCityId() + "'");
         }
 
         if (cityDto.getCityId() != null) {

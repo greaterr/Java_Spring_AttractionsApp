@@ -13,6 +13,7 @@ import ru.aston.attractionapp.repository.AttractionRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,13 +24,34 @@ public class AttractionServiceImpl implements AttractionService {
 
     @Override
     @Transactional
-    public AttractionDto addAttraction(AttractionDto attractionDto) {
-        Attraction attraction = AttractionMapper.INSTANCE.toAttractionEntity(attractionDto);
+    public AttractionDto addAttraction(AttractionDto attractionDto) throws IllegalArgumentException {
+        Optional<Attraction> existingAttraction;
+        if (attractionDto.getCity() != null) {
+            existingAttraction = attractionRepository.findByNameAndCityCityId(attractionDto.getName(), attractionDto.getCity().getCityId());
+        } else {
+            existingAttraction = attractionRepository.findByNameAndCityIsNull(attractionDto.getName());
+        }
 
+        if (existingAttraction.isPresent()) {
+            throw new IllegalArgumentException("Attraction with name '" + attractionDto.getName() +
+                    "' already exists in the specified city or without a city");
+        }
+
+        if (attractionDto.getAttractionId() != null) {
+            Optional<Attraction> existingAttractionById = attractionRepository.findById(attractionDto.getAttractionId());
+            if (existingAttractionById.isPresent()) {
+                throw new IllegalArgumentException("Attraction with id '" + attractionDto.getAttractionId() +
+                        "' already exists");
+            }
+        }
+
+        Attraction attraction = AttractionMapper.INSTANCE.toAttractionEntity(attractionDto);
         Attraction savedAttraction = attractionRepository.save(attraction);
 
         return AttractionMapper.INSTANCE.toAttractionDto(savedAttraction);
     }
+
+
 
     @Override
     @Transactional
