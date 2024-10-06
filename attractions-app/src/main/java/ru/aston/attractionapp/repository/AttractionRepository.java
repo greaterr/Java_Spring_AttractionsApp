@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface AttractionRepository extends JpaRepository<Attraction, Long> {
-    List<Attraction> findAllByOrderByNameAsc();
+    List<Attraction> findAllByOrderByAttractionIdAsc();
     List<Attraction> findAllByType(AttractionType type);
     List<Attraction> findAllByCityCityId(Long cityId);
 

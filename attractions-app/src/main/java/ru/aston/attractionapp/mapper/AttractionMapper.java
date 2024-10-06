@@ -10,11 +10,10 @@ import org.mapstruct.Mapper;
 @Mapper(uses = {CityMapper.class, ActivityMapper.class})
 public interface AttractionMapper {
     AttractionMapper INSTANCE = Mappers.getMapper(AttractionMapper.class);
-    @Mapping(source = "attractionId", target = "attractionId")
-    @Mapping(source = "city", target = "city")
-    @Mapping(source = "activities", target = "activities", ignore = true)
+
+    @Mapping(target = "city", qualifiedByName = "noAttractions")
+    @Mapping(target = "activities", qualifiedByName = "noAttractions")
     AttractionDto toAttractionDto(Attraction attraction);
-    @Mapping(source = "city", target = "city")
-    @Mapping(source = "activities", target = "activities", ignore = true)
+
     Attraction toAttractionEntity(AttractionDto dto);
 }

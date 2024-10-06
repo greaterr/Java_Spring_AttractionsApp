@@ -25,7 +25,7 @@ public class AttractionServiceImpl implements AttractionService {
     @Override
     public List<AttractionDto> findAllAttractions() {
         List<AttractionDto> collect = new ArrayList<>();
-        for (Attraction attraction : this.attractionRepository.findAllByOrderByNameAsc()) {
+        for (Attraction attraction : this.attractionRepository.findAllByOrderByAttractionIdAsc()) {
             AttractionDto attractionDto = AttractionMapper.INSTANCE.toAttractionDto(attraction);
             collect.add(attractionDto);
         }
