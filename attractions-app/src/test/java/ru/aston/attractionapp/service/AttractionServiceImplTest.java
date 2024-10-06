@@ -42,6 +42,8 @@ class AttractionServiceImplTest {
         attractionDto.setActivities(null);
         attractionDto.setCity(null);
         AttractionDto savedAttraction = attractionService.addAttraction(attractionDto);
+        assertEquals(5, savedAttraction.getAttractionId());
         assertEquals("Kremlin", savedAttraction.getName());
+        assertEquals("new description", savedAttraction.getDescription());
     }
 }

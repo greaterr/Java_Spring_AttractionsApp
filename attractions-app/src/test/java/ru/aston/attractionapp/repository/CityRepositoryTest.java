@@ -28,9 +28,10 @@ class CityRepositoryTest {
 //    @Test
 //    public void testSaveCitySuccess() {
 //        CityDto cityDto = new CityDto();
-//        cityDto.setCityId(4L);
 //        cityDto.setName("Kazan");
 //        cityDto.setPopulation(1200000);
+//        cityDto.setAttractions(null);
+//        cityDto.setHasMetro(true);
 //        City city = CityMapper.INSTANSE.toCityEntity(cityDto);
 //        City newCity = cityRepository.save(city);
 //        cityDto = CityMapper.INSTANSE.toCityDto(newCity);

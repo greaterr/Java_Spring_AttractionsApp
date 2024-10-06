@@ -9,13 +9,13 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Getter
+@Setter
 @Table(name="cities")
 public class City {
 
     @Id
-    @GeneratedValue
-    @Getter
-    @Setter
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cityId;
 
     private String name;
