@@ -21,7 +21,7 @@ public class AttractionsController {
     @Autowired
     private final AttractionService attractionService;
 
-    @PostMapping
+    @PostMapping("/attractions")
     public ResponseEntity<AttractionDto> addAttraction(@RequestBody AttractionDto attractionDto) {
         AttractionDto savedAttraction = attractionService.addAttraction(attractionDto);
         return new ResponseEntity<>(savedAttraction, HttpStatus.CREATED);
