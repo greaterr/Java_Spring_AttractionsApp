@@ -4,11 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import ru.aston.attractionapp.dto.AttractionDto;
-import ru.aston.attractionapp.entity.Attraction;
+
 import ru.aston.attractionapp.entity.AttractionType;
 import ru.aston.attractionapp.service.AttractionService;
 
@@ -21,6 +21,12 @@ public class AttractionsController {
     @Autowired
     private final AttractionService attractionService;
 
+    @PostMapping
+    public ResponseEntity<AttractionDto> addAttraction(@RequestBody AttractionDto attractionDto) {
+        AttractionDto savedAttraction = attractionService.addAttraction(attractionDto);
+        return new ResponseEntity<>(savedAttraction, HttpStatus.CREATED);
+    }
+
     @GetMapping("/attractions")
     public List<AttractionDto> findAllAttractions() {
         return this.attractionService.findAllAttractions();
@@ -31,14 +37,19 @@ public class AttractionsController {
         return  this.attractionService.findAttractionsByType(type);
     }
 
-    @GetMapping("/attractions/city/{cityId}")
+    @GetMapping("/attractions/city/id/{cityId}")
     public List<AttractionDto> findAttractionsByCityId(@PathVariable Long cityId) {
         return  this.attractionService.findAllByCityId(cityId);
     }
 
+    @GetMapping("/attractions/city/name/{cityName}")
+    public List<AttractionDto> findAttractionsByCityName(@PathVariable String cityName) {
+        return  this.attractionService.findAllByCityName(cityName);
+    }
+
     @GetMapping("/attractions/{attractionId}")
         public AttractionDto findAttractionById(@PathVariable Long attractionId) {
-            return this.attractionService.findAttractinById(attractionId);
+            return this.attractionService.findAttractionById(attractionId);
         }
 }
 
