@@ -13,6 +13,7 @@ public interface AttractionRepository extends JpaRepository<Attraction, Long> {
     Optional<Attraction> findByNameAndCityCityId(String cityName, Long cityId);
     Optional<Attraction> findByNameAndCityIsNull(String cityName);
     List<Attraction> findAllByOrderByAttractionIdAsc();
+    List<Attraction> findAllByOrderByNameAsc();
     List<Attraction> findAllByType(AttractionType type);
     List<Attraction> findAllByCityCityId(Long cityId);
     List<Attraction> findAllByCityName(String cityName);

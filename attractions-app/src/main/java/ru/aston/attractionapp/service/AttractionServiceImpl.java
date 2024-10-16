@@ -12,14 +12,15 @@ import ru.aston.attractionapp.mapper.AttractionMapper;
 import ru.aston.attractionapp.repository.AttractionRepository;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AttractionServiceImpl implements AttractionService {
 
-    @Autowired
     private final AttractionRepository attractionRepository;
 
     @Override
@@ -44,13 +45,10 @@ public class AttractionServiceImpl implements AttractionService {
                         "' already exists");
             }
         }
-
         Attraction attraction = AttractionMapper.INSTANCE.toAttractionEntity(attractionDto);
         Attraction savedAttraction = attractionRepository.save(attraction);
-
         return AttractionMapper.INSTANCE.toAttractionDto(savedAttraction);
     }
-
 
 
     @Override
@@ -102,5 +100,56 @@ public class AttractionServiceImpl implements AttractionService {
     public AttractionDto findAttractionById(Long attractionId) {
         Attraction attraction = this.attractionRepository.findById(attractionId).orElse(null);
         return AttractionMapper.INSTANCE.toAttractionDto(attraction);
+    }
+
+    @Override
+    @Transactional
+    public List<AttractionDto> findAllAttractionsFiltered(String orderByName, String attractionType) throws IllegalArgumentException {
+        List<AttractionDto> attractions = new ArrayList<>();
+        for (Attraction attraction : this.attractionRepository.findAllByOrderByAttractionIdAsc()) {
+            AttractionDto attractionDto = AttractionMapper.INSTANCE.toAttractionDto(attraction);
+            attractions.add(attractionDto);
+        }
+        if ("asc".equalsIgnoreCase(orderByName)) {
+            attractions.sort(Comparator.comparing(AttractionDto::getName));
+        } else if ("desc".equalsIgnoreCase(orderByName)) {
+            attractions.sort(Comparator.comparing(AttractionDto::getName).reversed());
+        } else {
+            throw new IllegalArgumentException("Wrong parameter orderByName <asc/desc>.");
+        }
+        if (attractionType != null) {
+            AttractionType type = AttractionType.valueOf(attractionType.toUpperCase());
+            attractions = attractions.stream()
+                    .filter(attraction -> attraction.getType().equals(type))
+                    .collect(Collectors.toList());
+        } else {
+            throw new IllegalArgumentException("Wrong attraction type. See the AttractionType class.");
+        }
+        return attractions;
+    }
+
+    @Override
+    @Transactional
+    public AttractionDto updateAttraction(AttractionDto updatedAttraction) throws IllegalArgumentException {
+        Optional<Attraction> foundAttractionOptional = attractionRepository.findById(updatedAttraction.getAttractionId());
+
+        if (foundAttractionOptional.isPresent()) {
+            Attraction foundAttraction = foundAttractionOptional.get();
+            foundAttraction.setDescription(updatedAttraction.getDescription());
+            attractionRepository.save(foundAttraction);
+            return AttractionMapper.INSTANCE.toAttractionDto(foundAttraction);
+        } else {
+            throw new IllegalArgumentException("Attraction not found with ID: " + updatedAttraction.getAttractionId());
+        }
+    }
+
+    @Override
+    public void deleteAttractionById(long l) throws IllegalArgumentException{
+        Optional<Attraction> foundAttractionOptional = attractionRepository.findById(l);
+        if(foundAttractionOptional.isPresent()) {
+            attractionRepository.delete(foundAttractionOptional.get());
+        } else {
+            throw new IllegalArgumentException("There is no attraction with id " + l + " in database");
+        }
     }
 }

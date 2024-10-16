@@ -12,13 +12,23 @@ import ru.aston.attractionapp.service.AttractionService;
 import java.util.List;
 
 @RestController
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AttractionsController {
 
-    @Autowired
     private final AttractionService attractionService;
 
-    @PostMapping("/attractions")
+    @PostMapping("/attractions/delete")
+    public ResponseEntity<Object> deleteAttraction(
+            @RequestParam(required = false) String attractionId) {
+        try {
+            attractionService.deleteAttractionById(Long.parseLong(attractionId));
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        }
+    }
+
+    @PostMapping("/attractions/add")
     public ResponseEntity<Object> addAttraction(@RequestBody AttractionDto attractionDto) {
         try {
             AttractionDto savedAttraction = attractionService.addAttraction(attractionDto);
@@ -28,30 +38,59 @@ public class AttractionsController {
         }
     }
 
+    @PostMapping("/attractions/update")
+    public ResponseEntity<Object> updateAttraction(
+            @RequestParam(required = true) String attractionId,
+            @RequestParam(required = true) String description) {
+        try {
+            AttractionDto attractionDto = new AttractionDto();
+            attractionDto.setAttractionId(Long.parseLong(attractionId));
+            attractionDto.setDescription(description);
+
+            AttractionDto updatedAttraction = attractionService.updateAttraction(attractionDto);
+            return new ResponseEntity<>(updatedAttraction, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        }
+    }
+
+    @GetMapping("/attractions/filter")
+    public ResponseEntity<Object> findAllAttractionsFiltered(
+            @RequestParam(required = false) String orderByName,
+            @RequestParam(required = false) String attractionType) {
+        try {
+            List<AttractionDto> attractions = this.attractionService.findAllAttractionsFiltered(orderByName, attractionType);
+            return new ResponseEntity<>(attractions, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/attractions/city")
+    public ResponseEntity<Object> findAttractionsByCity(
+            @RequestParam(required = false) String cityName) {
+        try {
+            List<AttractionDto> attractions = this.attractionService.findAllByCityName(cityName);
+            return new ResponseEntity<>(attractions, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @GetMapping("/attractions")
     public List<AttractionDto> findAllAttractions() {
         return this.attractionService.findAllAttractions();
     }
 
+    @GetMapping("/attractions/{attractionId}")
+    public AttractionDto findAttractionById(@PathVariable Long attractionId) {
+        return this.attractionService.findAttractionById(attractionId);
+    }
+
     @GetMapping("/attractions/type/{type}")
     public List<AttractionDto> findAttractionsByType(@PathVariable AttractionType type) {
-        return  this.attractionService.findAttractionsByType(type);
+        return this.attractionService.findAttractionsByType(type);
     }
-
-    @GetMapping("/attractions/city/id/{cityId}")
-    public List<AttractionDto> findAttractionsByCityId(@PathVariable Long cityId) {
-        return  this.attractionService.findAllByCityId(cityId);
-    }
-
-    @GetMapping("/attractions/city/name/{cityName}")
-    public List<AttractionDto> findAttractionsByCityName(@PathVariable String cityName) {
-        return  this.attractionService.findAllByCityName(cityName);
-    }
-
-    @GetMapping("/attractions/{attractionId}")
-        public AttractionDto findAttractionById(@PathVariable Long attractionId) {
-            return this.attractionService.findAttractionById(attractionId);
-        }
 }
 
 

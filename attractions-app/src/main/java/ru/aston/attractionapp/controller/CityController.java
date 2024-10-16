@@ -11,16 +11,24 @@ import ru.aston.attractionapp.dto.CityDto;
 import ru.aston.attractionapp.service.CityService;
 
 @Controller
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class CityController {
 
-    @Autowired
     private final CityService cityService;
 
-    @PostMapping("/cities")
+    @PostMapping("/cities/add")
     public ResponseEntity<Object> addCity(@RequestBody CityDto cityDto) {
         try {
             CityDto savedCity = cityService.addCity(cityDto);
+            return new ResponseEntity<>(savedCity, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        }
+    }
+    @PostMapping("/cities/update")
+    public ResponseEntity<Object> updateCity(@RequestBody CityDto cityDto) {
+        try {
+            CityDto savedCity = cityService.updateCity(cityDto);
             return new ResponseEntity<>(savedCity, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);

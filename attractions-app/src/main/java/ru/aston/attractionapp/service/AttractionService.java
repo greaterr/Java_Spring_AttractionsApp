@@ -8,7 +8,7 @@ import java.util.List;
 public interface AttractionService {
     AttractionDto addAttraction(AttractionDto attractionDto);
 
-    public List<AttractionDto> findAllAttractions();
+    List<AttractionDto> findAllAttractions();
 
     List<AttractionDto> findAttractionsByType(AttractionType type);
 
@@ -17,4 +17,10 @@ public interface AttractionService {
     List<AttractionDto> findAllByCityName(String cityName);
 
     AttractionDto findAttractionById(Long attractionId);
+
+    List<AttractionDto> findAllAttractionsFiltered(String orderByName, String filterByType);
+
+    AttractionDto updateAttraction(AttractionDto updatedAttraction);
+
+    void deleteAttractionById(long l);
 }
