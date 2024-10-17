@@ -86,11 +86,14 @@ public class AttractionServiceImpl implements AttractionService {
 
     @Override
     @Transactional
-    public List<AttractionDto> findAllByCityName(String cityName) {
+    public List<AttractionDto> findAllByCityName(String cityName) throws IllegalArgumentException {
         List<AttractionDto> collect = new ArrayList<>();
         for (Attraction attraction : this.attractionRepository.findAllByCityName(cityName)) {
             AttractionDto attractionDto = AttractionMapper.INSTANCE.toAttractionDto(attraction);
             collect.add(attractionDto);
+        }
+        if (collect.isEmpty()) {
+            throw new IllegalArgumentException("No attractions for city " + cityName + " was found in dadtabase");
         }
         return collect;
     }

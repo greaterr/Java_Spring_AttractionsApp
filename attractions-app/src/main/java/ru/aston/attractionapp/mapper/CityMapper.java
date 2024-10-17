@@ -7,7 +7,7 @@ import org.mapstruct.factory.Mappers;
 import ru.aston.attractionapp.dto.CityDto;
 import ru.aston.attractionapp.entity.City;
 
-@Mapper
+@Mapper(uses = AttractionMapper.class)
 public interface CityMapper {
     CityMapper INSTANSE = Mappers.getMapper(CityMapper.class);
 

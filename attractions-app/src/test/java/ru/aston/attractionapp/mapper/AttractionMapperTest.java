@@ -1,52 +1,73 @@
 package ru.aston.attractionapp.mapper;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import ru.aston.attractionapp.AttractionsApplication;
 import ru.aston.attractionapp.dto.AttractionDto;
+import ru.aston.attractionapp.dto.CityDto;
 import ru.aston.attractionapp.entity.Attraction;
+import ru.aston.attractionapp.entity.City;
+import ru.aston.attractionapp.entity.Activity;
 
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@ActiveProfiles("test")
-@SpringBootTest(classes = AttractionsApplication.class)
-@Testcontainers
 class AttractionMapperTest {
 
     AttractionMapper mapper = AttractionMapper.INSTANCE;
 
-
     @Test
-    public void testToAttractionDto() {
+    void testToAttractionDto() {
+        City city = new City();
+        city.setCityId(1L);
+        city.setName("CityName");
+
+        Activity activity = new Activity();
+        activity.setActivityId(1L);
+        activity.setName("ActivityName");
 
         Attraction attraction = new Attraction();
         attraction.setAttractionId(1L);
-        attraction.setName("city");
-        attraction.setActivities(null);
+        attraction.setName("AttractionName");
+        attraction.setCity(city);
+        attraction.setActivities(List.of(activity));
 
         AttractionDto actualDto = mapper.toAttractionDto(attraction);
 
-        assertEquals(actualDto.getAttractionId(), attraction.getAttractionId());
-        assertEquals(actualDto.getName(), attraction.getName());
-        assertNull(actualDto.getActivities());
+        assertEquals(attraction.getAttractionId(), actualDto.getAttractionId());
+        assertEquals(attraction.getName(), actualDto.getName());
+
+        assertNotNull(actualDto.getCity());
+        assertEquals(attraction.getCity().getCityId(), actualDto.getCity().getCityId());
+        assertEquals(attraction.getCity().getName(), actualDto.getCity().getName());
+
+        assertNotNull(actualDto.getActivities());
+        assertEquals(1, actualDto.getActivities().size());
+        assertEquals(attraction.getActivities().get(0).getActivityId(), actualDto.getActivities().get(0).getActivityId());
     }
 
     @Test
-    public void testToAttractionEntity() {
+    void testToAttractionEntity() {
+        CityDto cityDto = new CityDto();
+        cityDto.setCityId(1L);
+        cityDto.setName("CityName");
+
         AttractionDto dto = new AttractionDto();
         dto.setAttractionId(1L);
-        dto.setCity(null);
-        dto.setName("city");
-        dto.setDescription("city description");
+        dto.setName("AttractionName");
+        dto.setCity(cityDto);
         dto.setActivities(null);
 
         Attraction actualEntity = mapper.toAttractionEntity(dto);
 
-        assertEquals(actualEntity.getAttractionId(), dto.getAttractionId());
-        assertEquals(actualEntity.getDescription(), dto.getDescription());
+        assertEquals(dto.getAttractionId(), actualEntity.getAttractionId());
+        assertEquals(dto.getName(), actualEntity.getName());
+
+        assertNotNull(actualEntity.getCity());
+        assertEquals(dto.getCity().getCityId(), actualEntity.getCity().getCityId());
+        assertEquals(dto.getCity().getName(), actualEntity.getCity().getName());
+
         assertNull(actualEntity.getActivities());
+        assertEquals(1, actualEntity.getActivities().size());
+        assertNull(dto.getActivities().get(0));
     }
 }

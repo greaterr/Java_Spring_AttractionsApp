@@ -14,7 +14,7 @@ public interface AttractionService {
 
     List<AttractionDto> findAllByCityId(Long cityId);
 
-    List<AttractionDto> findAllByCityName(String cityName);
+    List<AttractionDto> findAllByCityName(String cityName) throws IllegalArgumentException;
 
     AttractionDto findAttractionById(Long attractionId);
 
