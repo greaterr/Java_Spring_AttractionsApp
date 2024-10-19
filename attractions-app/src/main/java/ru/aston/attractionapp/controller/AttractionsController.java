@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,13 +16,11 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@Slf4j
-@RequestMapping("/attractions")
 @Tag(name = "REST-контроллер для работы с достопримечательностями.", description = "Реализует операции создания, обновления, удаления и поиска достопримечательностей.")
+@RequestMapping("/attractions")
 public class AttractionsController {
 
     private final AttractionService attractionService;
-
 
     @Operation(summary = "Удаление достопримечательности", description = "Удаляет достопримечательность по её ID")
     @ApiResponses(value = {
@@ -31,16 +28,10 @@ public class AttractionsController {
             @ApiResponse(responseCode = "404", description = "Ресурс для удаления не найден")
     })
     @DeleteMapping("/delete")
-    public ResponseEntity<Object> deleteAttraction(
-            @RequestParam(required = false) String attractionId) {
-        try {
-            attractionService.deleteAttractionById(Long.parseLong(attractionId));
-            log.info("Successfully deleted attraction with ID: {}", attractionId);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (IllegalArgumentException e) {
-            log.error("Error deleting attraction with ID: {}", attractionId, e);
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<Void> deleteAttraction(
+            @RequestParam String attractionId) {
+        attractionService.deleteAttractionById(Long.parseLong(attractionId));
+        return ResponseEntity.noContent().build();
     }
 
     @Operation(
@@ -52,23 +43,16 @@ public class AttractionsController {
             @ApiResponse(responseCode = "404", description = "Достопримечательность с указанным ID не существует")
     })
     @PutMapping("/update")
-    public ResponseEntity<Object> updateAttraction(
+    public ResponseEntity<AttractionDto> updateAttraction(
             @RequestParam String attractionId,
             @RequestParam String description) {
-        try {
-            AttractionDto attractionDto = new AttractionDto();
-            attractionDto.setAttractionId(Long.parseLong(attractionId));
-            attractionDto.setDescription(description);
+        AttractionDto attractionDto = new AttractionDto();
+        attractionDto.setAttractionId(Long.parseLong(attractionId));
+        attractionDto.setDescription(description);
 
-            AttractionDto updatedAttraction = attractionService.updateAttraction(attractionDto);
-            log.info("Successfully updated attraction with ID: {}", attractionId);
-            return new ResponseEntity<>(updatedAttraction, HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            log.error("Failed to update attraction with ID: {}", attractionId, e);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+        AttractionDto updatedAttraction = attractionService.updateAttraction(attractionDto);
+        return ResponseEntity.ok(updatedAttraction);
     }
-
 
     @Operation(
             summary = "Добавление достопримечательности",
@@ -79,15 +63,9 @@ public class AttractionsController {
             @ApiResponse(responseCode = "409", description = "Конфликт: достопримечательность уже существует")
     })
     @PostMapping("/add")
-    public ResponseEntity<Object> addAttraction(@RequestBody AttractionDto attractionDto) {
-        try {
-            AttractionDto savedAttraction = attractionService.addAttraction(attractionDto);
-            log.info("Successfully added new attraction: {}", savedAttraction.getName());
-            return new ResponseEntity<>(savedAttraction, HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
-            log.error("Failed to add attraction: {}", attractionDto.getName(), e);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
-        }
+    public ResponseEntity<AttractionDto> addAttraction(@RequestBody AttractionDto attractionDto) {
+        AttractionDto savedAttraction = attractionService.addAttraction(attractionDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedAttraction);
     }
 
     @Operation(
@@ -99,17 +77,11 @@ public class AttractionsController {
             @ApiResponse(responseCode = "400", description = "Неверные параметры запроса (например, некорректный тип фильтрации).")
     })
     @GetMapping("/filter")
-    public ResponseEntity<Object> findAllAttractionsFiltered(
+    public ResponseEntity<List<AttractionDto>> findAllAttractionsFiltered(
             @RequestParam(required = false) String orderByName,
             @RequestParam(required = false) String attractionType) {
-        try {
-            List<AttractionDto> attractions = this.attractionService.findAllAttractionsFiltered(orderByName, attractionType);
-            log.info("Successfully retrieved filtered attractions");
-            return new ResponseEntity<>(attractions, HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            log.error("Error filtering attractions", e);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+        List<AttractionDto> attractions = this.attractionService.findAllAttractionsFiltered(orderByName, attractionType);
+        return ResponseEntity.ok(attractions);
     }
 
     @Operation(
@@ -121,16 +93,10 @@ public class AttractionsController {
             @ApiResponse(responseCode = "404", description = "Произошла ошибка при получении данных для указанного города. Город с такми именем не найден.")
     })
     @GetMapping("/city")
-    public ResponseEntity<Object> findAttractionsByCity(
+    public ResponseEntity<List<AttractionDto>> findAttractionsByCity(
             @RequestParam String cityName) {
-        try {
-            List<AttractionDto> attractions = this.attractionService.findAllByCityName(cityName);
-            log.info("Successfully retrieved attractions for city: {}", cityName);
-            return new ResponseEntity<>(attractions, HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            log.error("Error retrieving attractions for city: {}", cityName, e);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+        List<AttractionDto> attractions = this.attractionService.findAllByCityName(cityName);
+        return ResponseEntity.ok(attractions);
     }
 
     @Operation(
@@ -138,8 +104,8 @@ public class AttractionsController {
             description = "Возвращает все достопримечательности отсортированных по ID"
     )
     @GetMapping("/")
-    public List<AttractionDto> findAllAttractions() {
-        log.info("Retrieving all attractions");
-        return this.attractionService.findAllAttractions();
+    public ResponseEntity<List<AttractionDto>> findAllAttractions() {
+        List<AttractionDto> attractions = this.attractionService.findAllAttractions();
+        return ResponseEntity.ok(attractions);
     }
 }

@@ -1,4 +1,4 @@
-package ru.aston.attractionapp.exceptions;
+package ru.aston.attractionapp.handler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

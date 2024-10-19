@@ -117,7 +117,7 @@ public class AttractionServiceImpl implements AttractionService {
             attractions.sort(Comparator.comparing(AttractionDto::getName));
         } else if ("desc".equalsIgnoreCase(orderByName)) {
             attractions.sort(Comparator.comparing(AttractionDto::getName).reversed());
-        } else {
+        } else if (orderByName != null) {
             throw new IllegalArgumentException("Wrong parameter orderByName <asc/desc>.");
         }
         if (attractionType != null) {
@@ -125,8 +125,6 @@ public class AttractionServiceImpl implements AttractionService {
             attractions = attractions.stream()
                     .filter(attraction -> attraction.getType().equals(type))
                     .collect(Collectors.toList());
-        } else {
-            throw new IllegalArgumentException("Wrong attraction type. See the AttractionType class.");
         }
         return attractions;
     }

@@ -6,7 +6,7 @@ import ru.aston.attractionapp.entity.AttractionType;
 import java.util.List;
 
 public interface AttractionService {
-    AttractionDto addAttraction(AttractionDto attractionDto);
+    AttractionDto addAttraction(AttractionDto attractionDto) throws IllegalArgumentException;
 
     List<AttractionDto> findAllAttractions();
 
@@ -18,9 +18,9 @@ public interface AttractionService {
 
     AttractionDto findAttractionById(Long attractionId);
 
-    List<AttractionDto> findAllAttractionsFiltered(String orderByName, String filterByType);
+    List<AttractionDto> findAllAttractionsFiltered(String orderByName, String filterByType) throws IllegalArgumentException;
 
-    AttractionDto updateAttraction(AttractionDto updatedAttraction);
+    AttractionDto updateAttraction(AttractionDto updatedAttraction) throws IllegalArgumentException;
 
-    void deleteAttractionById(long l);
+    void deleteAttractionById(long l) throws IllegalArgumentException;
 }

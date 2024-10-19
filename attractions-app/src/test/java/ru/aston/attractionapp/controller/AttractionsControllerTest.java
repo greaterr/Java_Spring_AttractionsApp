@@ -47,7 +47,7 @@ class AttractionsControllerTest {
         mockMvc.perform(post("/attractions/add")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"New Attraction\"}"))
-                .andExpect(status().isConflict())
+                .andExpect(status().isBadRequest())
                 .andExpect(content().string("Attraction already exists"));
     }
 
@@ -72,7 +72,7 @@ class AttractionsControllerTest {
         mockMvc.perform(put("/attractions/update")
                         .param("attractionId", "1")
                         .param("description", "Updated description"))
-                .andExpect(status().isNotFound())
+                .andExpect(status().isBadRequest())
                 .andExpect(content().string("Invalid ID"));
     }
 
@@ -89,7 +89,7 @@ class AttractionsControllerTest {
 
         mockMvc.perform(delete("/attractions/delete")
                         .param("attractionId", "1"))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -135,7 +135,7 @@ class AttractionsControllerTest {
 
         mockMvc.perform(get("/attractions/city")
                         .param("cityName", "Some City"))
-                .andExpect(status().isNotFound())
+                .andExpect(status().isBadRequest())
                 .andExpect(content().string("City not found"));
     }
 
