@@ -30,13 +30,14 @@ class CityControllerTest {
         cityDto.setName("New city");
         when(cityService.addCity(any(CityDto.class))).thenReturn(cityDto);
 
-        mockMvc.perform(post("/cities")
+        mockMvc.perform(post("/cities/add")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"New city\"}"))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value("New city"));
 
     }
+
     @Test
     void addCityFailTest() throws Exception {
         CityDto cityDto = new CityDto();
@@ -44,7 +45,7 @@ class CityControllerTest {
         cityDto.setHasMetro(false);
 
         when(cityService.addCity(any(CityDto.class))).thenReturn(cityDto);
-        mockMvc.perform(post("/cities")
+        mockMvc.perform(post("/cities/add")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"New city\"}"))
                 .andExpect(status().isCreated())
@@ -52,9 +53,9 @@ class CityControllerTest {
         when(cityService.addCity(any(CityDto.class)))
                 .thenThrow(new IllegalArgumentException("City already exists"));
 
-        mockMvc.perform(post("/cities")
+        mockMvc.perform(post("/cities/add")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"New city\"}"))
                 .andExpect(status().isConflict());
-                    }
+    }
 }

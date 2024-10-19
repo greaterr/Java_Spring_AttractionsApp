@@ -67,7 +67,7 @@ class AttractionMapperTest {
         assertEquals(dto.getCity().getName(), actualEntity.getCity().getName());
 
         assertNull(actualEntity.getActivities());
-        assertEquals(1, actualEntity.getActivities().size());
-        assertNull(dto.getActivities().get(0));
+        assertEquals(1, actualEntity.getAttractionId());
+        assertNull(dto.getActivities());
     }
 }

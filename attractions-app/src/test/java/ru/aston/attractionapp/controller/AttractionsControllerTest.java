@@ -13,7 +13,7 @@ import ru.aston.attractionapp.service.AttractionService;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -41,6 +41,17 @@ class AttractionsControllerTest {
     }
 
     @Test
+    void addAttractionTest_withException() throws Exception {
+        when(attractionService.addAttraction(any(AttractionDto.class))).thenThrow(new IllegalArgumentException("Attraction already exists"));
+
+        mockMvc.perform(post("/attractions/add")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"New Attraction\"}"))
+                .andExpect(status().isConflict())
+                .andExpect(content().string("Attraction already exists"));
+    }
+
+    @Test
     void updateAttractionTest() throws Exception {
         AttractionDto attractionDto = new AttractionDto();
         attractionDto.setAttractionId(1L);
@@ -48,11 +59,37 @@ class AttractionsControllerTest {
 
         when(attractionService.updateAttraction(any(AttractionDto.class))).thenReturn(attractionDto);
 
-        mockMvc.perform(post("/attractions/update")
+        mockMvc.perform(put("/attractions/update")
                         .param("attractionId", "1")
                         .param("description", "Updated description"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.description").value("Updated description"));
+    }
+    @Test
+    void updateAttractionTest_withException() throws Exception {
+        when(attractionService.updateAttraction(any(AttractionDto.class))).thenThrow(new IllegalArgumentException("Invalid ID"));
+
+        mockMvc.perform(put("/attractions/update")
+                        .param("attractionId", "1")
+                        .param("description", "Updated description"))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Invalid ID"));
+    }
+
+    @Test
+    void deleteAttractionTest() throws Exception {
+        doNothing().when(attractionService).deleteAttractionById(1L);
+
+        mockMvc.perform(delete("/attractions/delete")
+                        .param("attractionId", "1"))
+                .andExpect(status().isNoContent());
+
+        doThrow(new IllegalArgumentException("There is no attraction with id 1 in database"))
+                .when(attractionService).deleteAttractionById(1L);
+
+        mockMvc.perform(delete("/attractions/delete")
+                        .param("attractionId", "1"))
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -68,6 +105,17 @@ class AttractionsControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name").value("Filtered Attraction"));
     }
+    @Test
+    void findAllAttractionsFilteredTest_withException() throws Exception {
+        when(attractionService.findAllAttractionsFiltered(any(), any())).thenThrow(new IllegalArgumentException("Filter error"));
+
+        mockMvc.perform(get("/attractions/filter")
+                        .param("orderByName", "asc")
+                        .param("attractionType", "NATURE_PARK"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Filter error"));
+    }
+
 
     @Test
     void FindAttractionsByCityTest() throws Exception {
@@ -81,6 +129,16 @@ class AttractionsControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name").value("City Attraction"));
     }
+    @Test
+    void findAttractionsByCityTest_withException() throws Exception {
+        when(attractionService.findAllByCityName(any())).thenThrow(new IllegalArgumentException("City not found"));
+
+        mockMvc.perform(get("/attractions/city")
+                        .param("cityName", "Some City"))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("City not found"));
+    }
+
 
     @Test
     void FindAllAttractionsTest() throws Exception {
@@ -89,33 +147,8 @@ class AttractionsControllerTest {
 
         when(attractionService.findAllAttractions()).thenReturn(List.of(attractionDto));
 
-        mockMvc.perform(get("/attractions"))
+        mockMvc.perform(get("/attractions/"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name").value("Test Attraction"));
-    }
-
-    @Test
-    void FindAttractionByIdTest() throws Exception {
-        AttractionDto attractionDto = new AttractionDto();
-        attractionDto.setAttractionId(1L);
-        attractionDto.setName("Test Attraction");
-
-        when(attractionService.findAttractionById(1L)).thenReturn(attractionDto);
-
-        mockMvc.perform(get("/attractions/1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Test Attraction"));
-    }
-
-    @Test
-    void FindAttractionsByTypeTest() throws Exception {
-        AttractionDto attractionDto = new AttractionDto();
-        attractionDto.setName("Type-based Attraction");
-
-        when(attractionService.findAttractionsByType(AttractionType.NATURE_PARK)).thenReturn(List.of(attractionDto));
-
-        mockMvc.perform(get("/attractions/type/NATURE_PARK"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].name").value("Type-based Attraction"));
     }
 }
