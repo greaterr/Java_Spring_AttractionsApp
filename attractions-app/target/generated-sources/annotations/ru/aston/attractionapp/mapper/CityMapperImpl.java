@@ -10,7 +10,7 @@ import ru.aston.attractionapp.entity.City;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-10-19T17:16:35+0500",
+    date = "2024-10-19T17:38:11+0500",
     comments = "version: 1.6.0.RC1, compiler: javac, environment: Java 21.0.4 (Ubuntu)"
 )
 public class CityMapperImpl implements CityMapper {
