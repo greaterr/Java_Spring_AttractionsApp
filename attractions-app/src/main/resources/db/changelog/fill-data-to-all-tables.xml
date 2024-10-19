@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- Insert cities -->
+    <changeSet id="1" author="release">
+        <insert tableName="cities">
+            <column name="name" value="Ufa"/>
+            <column name="population" value="1000000"/>
+            <column name="has_metro" value="false"/>
+        </insert>
+        <insert tableName="cities">
+            <column name="name" value="Beloreck"/>
+            <column name="population" value="15000"/>
+            <column name="has_metro" value="false"/>
+        </insert>
+        <insert tableName="cities">
+            <column name="name" value="Starosubkhangulovo"/>
+            <column name="population" value="5000"/>
+            <column name="has_metro" value="false"/>
+        </insert>
+    </changeSet>
+
+    <!-- Insert attractions -->
+    <changeSet id="2" author="release">
+        <insert tableName="attractions">
+            <column name="name" value="Salavat Yulaev"/>
+            <column name="creation_date" valueDate="2024-10-04"/>
+            <column name="description" value="Bashkirian Hero Salavat Yulayev memorial"/>
+            <column name="type" value="MEMORIAL"/>
+            <column name="city_id" value="1"/>
+        </insert>
+        <insert tableName="attractions">
+            <column name="name" value="Agidel"/>
+            <column name="creation_date" valueDate="2024-10-04"/>
+            <column name="description" value="River in Bashkiria"/>
+            <column name="type" value="NATURE_PARK"/>
+            <column name="city_id" value="2"/>
+        </insert>
+        <insert tableName="attractions">
+            <column name="name" value="Shulgan-Tash"/>
+            <column name="creation_date" valueDate="2024-10-04"/>
+            <column name="description" value="Memorial park"/>
+            <column name="type" value="ARCHAEOLOGICAL"/>
+            <column name="city_id" value="3"/>
+        </insert>
+        <insert tableName="attractions">
+            <column name="name" value="Park Pobedy"/>
+            <column name="creation_date" valueDate="2024-10-04"/>
+            <column name="description" value="Memorial park of 2nd WW"/>
+            <column name="type" value="MUSEUM"/>
+            <column name="city_id" value="1"/>
+        </insert>
+    </changeSet>
+
+    <!-- Insert activities -->
+    <changeSet id="3" author="release">
+        <insert tableName="activities">
+            <column name="name" value="Bus"/>
+            <column name="description" value="Bus excursions"/>
+        </insert>
+        <insert tableName="activities">
+            <column name="name" value="Horsing"/>
+            <column name="description" value="Horse riding"/>
+        </insert>
+        <insert tableName="activities">
+            <column name="name" value="Hotel"/>
+            <column name="description" value="Stay in hotel"/>
+        </insert>
+        <insert tableName="activities">
+            <column name="name" value="Photography"/>
+            <column name="description" value="Make a professional photo"/>
+        </insert>
+    </changeSet>
+
+    <!-- Insert attraction-activity associations -->
+    <changeSet id="4" author="release">
+        <insert tableName="attractions_activities">
+            <column name="attraction_id" value="1"/>
+            <column name="activity_id" value="1"/>
+        </insert>
+        <insert tableName="attractions_activities">
+            <column name="attraction_id" value="1"/>
+            <column name="activity_id" value="2"/>
+        </insert>
+        <insert tableName="attractions_activities">
+            <column name="attraction_id" value="1"/>
+            <column name="activity_id" value="3"/>
+        </insert>
+        <insert tableName="attractions_activities">
+            <column name="attraction_id" value="1"/>
+            <column name="activity_id" value="4"/>
+        </insert>
+        <insert tableName="attractions_activities">
+            <column name="attraction_id" value="2"/>
+            <column name="activity_id" value="2"/>
+        </insert>
+        <insert tableName="attractions_activities">
+            <column name="attraction_id" value="2"/>
+            <column name="activity_id" value="3"/>
+        </insert>
+        <insert tableName="attractions_activities">
+            <column name="attraction_id" value="3"/>
+            <column name="activity_id" value="3"/>
+        </insert>
+        <insert tableName="attractions_activities">
+            <column name="attraction_id" value="3"/>
+            <column name="activity_id" value="4"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

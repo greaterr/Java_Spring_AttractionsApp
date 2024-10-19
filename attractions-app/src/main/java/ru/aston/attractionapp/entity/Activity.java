@@ -2,9 +2,7 @@ package ru.aston.attractionapp.entity;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -12,23 +10,17 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name="activities")
 public class Activity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long activityId;
     private String name;
     private String description;
 
     @ManyToMany(mappedBy = "activities")
-    private List<Attraction> attractionList;
-
-    public void setId(Long id) {
-        this.activityId = id;
-    }
-
-    public Long getId() {
-        return activityId;
-    }
+    private List<Attraction> attractions;
 }

@@ -5,5 +5,6 @@ public enum AttractionType {
     PARK,
     MUSEUM,
     ARCHAEOLOGICAL,
-    NATURE_PARK
+    NATURE_PARK,
+    MEMORIAL
 }

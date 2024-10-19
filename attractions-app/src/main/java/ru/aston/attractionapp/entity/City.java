@@ -1,9 +1,7 @@
 package ru.aston.attractionapp.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -11,11 +9,13 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Getter
+@Setter
 @Table(name="cities")
 public class City {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cityId;
 
     private String name;
@@ -23,14 +23,8 @@ public class City {
     @Column(name="has_metro")
     private boolean hasMetro;
 
-    @OneToMany
+    @OneToMany (mappedBy = "city", cascade = CascadeType.ALL)
     private List<Attraction> attractions;
 
-    public void setId(Long id) {
-        this.cityId = id;
-    }
 
-    public Long getId() {
-        return cityId;
-    }
 }
